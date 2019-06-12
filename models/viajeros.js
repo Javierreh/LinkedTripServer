@@ -16,10 +16,10 @@ let getAll = () => {
 }
 
 
-// Consulta para obtener un viajero segun su ID
-let getById = (idViajero) => {
+// Consulta para obtener un perfil de usuario segun su ID
+let getPerfilById = (idUsuario) => {
 	return new Promise((resolve, reject) => {
-		db.get().query('SELECT * FROM viajeros WHERE id = ?', [idViajero], (err, rows) => {
+		db.get().query('SELECT * FROM viajeros WHERE id = ?', [idUsuario], (err, rows) => {
 			if (err) {
 				reject(err);
 			}
@@ -31,7 +31,7 @@ let getById = (idViajero) => {
 }
 
 
-// Insertar un nuevo viajero
+// Insertar un nuevo usuario
 let insert = (values) => {
 	return new Promise((resolve, reject) => {
 		db.get().query('INSERT INTO viajeros(usuario, password, email, nombre, apellidos, sobre_mi, intereses, foto_perfil, ciudad, fecha_nacimiento, sexo, educacion, ocupacion, idiomas) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [values.usuario, values.password, values.email, values.nombre, values.apellidos, values.sobre_mi, values.intereses, values.foto_perfil, values.ciudad, values.fecha_nacimiento, values.sexo, values.educacion, values.ocupacion, values.idiomas], (err, result) => {
@@ -46,7 +46,7 @@ let insert = (values) => {
 }
 
 
-// Actualizar la información del viajero segun ID
+// Actualizar la información del usuario segun ID
 let updateById = (values) => {
 	return new Promise((resolve, reject) => {
 		db.get().query('UPDATE viajeros SET usuario = ?, password = ?, email = ?, nombre = ?, apellidos = ?, sobre_mi = ?, intereses = ?, foto_perfil = ?, ciudad = ?, fecha_nacimiento = ?, sexo = ?, educacion = ?, ocupacion = ?, idiomas = ? WHERE id = ?', [values.usuario, values.password, values.email, values.nombre, values.apellidos, values.sobre_mi, values.intereses, values.foto_perfil, values.ciudad, values.fecha_nacimiento, values.sexo, values.educacion, values.ocupacion, values.idiomas, values.id_viajero], (err, result) => {
@@ -63,7 +63,7 @@ let updateById = (values) => {
 
 module.exports = {
 	getAll: getAll,
-	getById: getById,
+	getPerfilById: getPerfilById,
 	insert: insert,
 	updateById: updateById
 }

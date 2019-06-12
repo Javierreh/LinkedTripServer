@@ -16,9 +16,9 @@ router.get('/', function(req, res) {
 
 
 /* Ruta para obtener un viajero según su ID */
-router.get('/:idViajero', function(req, res) {
-	viajerosModel.getById(req.params.idViajero).then(rows => {
-		if (rows.length === 0) res.json({ mensaje: `Ningún viajero encontrado con el ID ${req.params.idViajero}` });
+router.get('/:idUsuario', function(req, res) {
+	viajerosModel.getPerfilById(req.params.idUsuario).then(rows => {
+		if (rows.length === 0) res.json({ mensaje: `Ningún usuario encontrado con el ID ${req.params.idUsuario}` });
 		res.json(rows);
 	})
 	.catch(err => {
