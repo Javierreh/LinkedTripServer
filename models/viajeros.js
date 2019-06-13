@@ -49,7 +49,7 @@ let insert = (values) => {
 // Actualizar la información del usuario segun ID
 let updateById = (values) => {
 	return new Promise((resolve, reject) => {
-		db.get().query('UPDATE viajeros SET usuario = ?, password = ?, email = ?, nombre = ?, apellidos = ?, sobre_mi = ?, intereses = ?, foto_perfil = ?, ciudad = ?, fecha_nacimiento = ?, sexo = ?, educacion = ?, ocupacion = ?, idiomas = ? WHERE id = ?', [values.usuario, values.password, values.email, values.nombre, values.apellidos, values.sobre_mi, values.intereses, values.foto_perfil, values.ciudad, values.fecha_nacimiento, values.sexo, values.educacion, values.ocupacion, values.idiomas, values.id_viajero], (err, result) => {
+		db.get().query('UPDATE viajeros SET usuario = ?, password = ?, email = ?, nombre = ?, apellidos = ?, sobre_mi = ?, intereses = ?, foto_perfil = ?, ciudad = ?, fecha_nacimiento = ?, sexo = ?, educacion = ?, ocupacion = ?, idiomas = ? WHERE id = ?', [values.usuario, values.password, values.email, values.nombre, values.apellidos, values.sobre_mi, values.intereses, values.foto_perfil, values.ciudad, values.fecha_nacimiento, values.sexo, values.educacion, values.ocupacion, values.idiomas, values.id], (err, result) => {
 			if (err) {
 				reject(err);
 			}
