@@ -31,6 +31,21 @@ let getById = (idViaje) => {
 }
 
 
+// Consulta para obtener los viajes según ID del organizador
+let getByIdOrganizador = (idOrganizador) => {
+	return new Promise((resolve, reject) => {
+		db.get().query('SELECT viajes.id, viajes.titulo, viajes.fecha_inicio, viajes.fecha_fin, viajes.fk_organizador, DATEDIFF(viajes.fecha_fin, viajes.fecha_inicio) AS total_dias, viajes.viajeros_max, viajes.fecha_creacion, COUNT(DISTINCT viajeros_viajes.id) AS total_viajeros, COUNT(DISTINCT viajes_destinos.id) AS total_destinos, COUNT(DISTINCT actividades.id) AS total_actividades FROM viajes JOIN viajeros ON viajes.fk_organizador = viajeros.id LEFT JOIN viajeros_viajes ON viajeros_viajes.fk_viajes = viajes.id LEFT JOIN viajes_destinos ON viajes_destinos.fk_viajes = viajes.id LEFT JOIN actividades ON actividades.fk_viajes = viajes.id WHERE viajes.fk_organizador = ? GROUP BY 1 ORDER BY viajes.fecha_inicio ASC', [idOrganizador], (err, rows) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(rows);
+			}
+		});
+	});
+}
+
+
 // Insertar un nuevo viaje
 let insert = (values) => {
 	return new Promise((resolve, reject) => {
@@ -65,5 +80,6 @@ module.exports = {
 	getAll: getAll,
 	getById: getById,
 	insert: insert,
-	updateById: updateById
+	updateById: updateById,
+	getByIdOrganizador
 }

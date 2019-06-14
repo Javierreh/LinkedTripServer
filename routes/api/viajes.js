@@ -27,6 +27,18 @@ router.get('/:idViaje', function(req, res) {
 });
 
 
+/* Ruta para obtener los viajes según ID del organizador */
+router.get('/organizador/:idOrganizador', function(req, res) {
+	viajesModel.getByIdOrganizador(req.params.idOrganizador).then(rows => {
+		if (rows.length === 0) res.json({ mensaje: `Ningún viaje del organizador con ID ${req.params.idOrganizador}` });
+		res.json(rows);
+	})
+	.catch(err => {
+		res.json({ error: err });
+	});
+});
+
+
 /* Ruta para insertar un nuevo viajero */
 router.post('/new', (req, res) => {
 	viajesModel.insert(req.body).then(result => {
