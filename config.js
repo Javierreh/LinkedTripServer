@@ -1,0 +1,1 @@
+exports.SECRET_KEY = "Tengo hambre, ayuda";

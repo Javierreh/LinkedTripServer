@@ -17,9 +17,54 @@ let getAll = () => {
 
 
 // Consulta para obtener un perfil de usuario segun su ID
+let getUserById = (idUsuario) => {
+	return new Promise((resolve, reject) => {
+		db.get().query('SELECT * FROM viajeros WHERE viajeros.id = ?', [idUsuario], (err, rows) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(rows);
+			}
+		});
+	});
+}
+
+
+// Consulta para obtener un perfil de usuario segun su ID
 let getPerfilById = (idUsuario) => {
 	return new Promise((resolve, reject) => {
-		db.get().query('SELECT * FROM viajeros WHERE id = ?', [idUsuario], (err, rows) => {
+		db.get().query('SELECT viajeros.id, viajeros.usuario, viajeros.nombre, viajeros.apellidos, viajeros.sobre_mi, viajeros.foto_perfil, viajeros.fecha_registro, viajeros.intereses, viajeros.ciudad, viajeros.sexo, viajeros.fecha_nacimiento, viajeros.educacion, viajeros.ocupacion, viajeros.idiomas, ROUND(AVG(puntuaciones.puntos), 1) AS puntuacion_media FROM viajeros LEFT JOIN viajeros_viajes ON (viajeros_viajes.fk_viajeros = viajeros.id) LEFT JOIN viajes ON (viajes.id = viajeros_viajes.fk_viajes) LEFT JOIN puntuaciones ON (puntuaciones.fk_viajero_recibe = viajeros.id) WHERE viajeros.id = ?', [idUsuario], (err, rows) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(rows);
+			}
+		});
+	});
+}
+
+
+// Consulta para obtener un perfil de usuario segun nombre de usuario
+let getPerfilByUsuario = (usuario) => {
+	return new Promise((resolve, reject) => {
+		db.get().query('SELECT * FROM viajeros WHERE usuario = ?', [usuario], (err, rows) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(rows);
+			}
+		});
+	});
+}
+
+
+// Consulta para obtener un perfil de usuario segun nombre de usuario
+let getPuntuacionesById = (idUsuario) => {
+	return new Promise((resolve, reject) => {
+		db.get().query('SELECT puntuaciones.titulo_comentario, puntuaciones.puntos, puntuaciones.comentario, puntuaciones.fk_viajero_puntua AS viajero_puntua, puntuaciones.fk_viajero_recibe AS viajero_recibe, puntuaciones.fk_viaje AS viaje, puntuaciones.fecha, viajeros.usuario AS usuario_puntua, viajes.titulo AS titulo_viaje FROM puntuaciones JOIN viajeros ON viajeros.id = puntuaciones.fk_viajero_puntua LEFT JOIN viajes ON viajes.id = puntuaciones.fk_viaje WHERE puntuaciones.fk_viajero_recibe = ?', [idUsuario], (err, rows) => {
 			if (err) {
 				reject(err);
 			}
@@ -63,7 +108,10 @@ let updateById = (values) => {
 
 module.exports = {
 	getAll: getAll,
+	getUserById: getUserById,
 	getPerfilById: getPerfilById,
+	getPuntuacionesById: getPuntuacionesById,
 	insert: insert,
-	updateById: updateById
+	updateById: updateById,
+	getPerfilByUsuario: getPerfilByUsuario
 }
