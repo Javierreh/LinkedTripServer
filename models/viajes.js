@@ -73,6 +73,21 @@ let getById = (idViaje) => {
 
 
 // Consulta para obtener un viaje segun su ID
+let getByIdResumen = (idViaje) => {
+	return new Promise((resolve, reject) => {
+		db.get().query('SELECT viajes.id, viajes.titulo, viajes.fecha_inicio, viajes.fecha_fin, viajes.fk_organizador, DATEDIFF(viajes.fecha_fin, viajes.fecha_inicio) AS total_dias, viajes.viajeros_max, viajes.fecha_creacion, COUNT(DISTINCT viajeros_viajes.id) AS total_viajeros, COUNT(DISTINCT viajes_destinos.id) AS total_destinos, COUNT(DISTINCT actividades.id) AS total_actividades FROM viajes JOIN viajeros ON viajes.fk_organizador = viajeros.id LEFT JOIN viajeros_viajes ON viajeros_viajes.fk_viajes = viajes.id LEFT JOIN viajes_destinos ON viajes_destinos.fk_viajes = viajes.id LEFT JOIN actividades ON actividades.fk_viajes = viajes.id WHERE viajes.id = ? GROUP BY 1 ORDER BY viajes.fecha_inicio ASC', [idViaje], (err, rows) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(rows);
+			}
+		});
+	});
+}
+
+
+// Consulta para obtener un viaje segun su ID
 let getByIdSimple = (idViaje) => {
 	return new Promise((resolve, reject) => {
 		db.get().query('SELECT * FROM viajes WHERE viajes.id = ?', [idViaje], (err, rows) => {
@@ -186,7 +201,20 @@ let getDestinoByAll = (values) => {
 				reject(err);
 			}
 			else {
-				console.log(values.nombre);
+				resolve(rows);
+			}
+		});
+	});
+}
+
+// Obtener destinos por id viaje 
+let getDestinosByIdViaje = (id_viaje) => {
+	return new Promise((resolve, reject) => {
+		db.get().query('SELECT destinos.nombre, destinos.latitud, destinos.longitud FROM destinos JOIN viajes_destinos ON destinos.id = viajes_destinos.fk_destinos JOIN viajes ON viajes.id = viajes_destinos.fk_viajes WHERE viajes.id = ?', [id_viaje], (err, rows) => {
+			if (err) {
+				reject(err);
+			}
+			else {
 				resolve(rows);
 			}
 		});
@@ -209,17 +237,51 @@ let insertActividad = (values) => {
 }
 
 
+// Obtener activades por id viaje 
+let getActividadesByIdViaje = (id_viaje) => {
+	return new Promise((resolve, reject) => {
+		db.get().query('SELECT actividades.id, actividades.nombre FROM actividades JOIN viajes ON viajes.id = actividades.fk_viajes WHERE viajes.id = ?', [id_viaje], (err, rows) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(rows);
+			}
+		});
+	});
+}
+
+
+// Borrar un viaje
+let deleteViaje = (id_viaje) => {
+	return new Promise((resolve, reject) => {
+		db.get().query('DELETE FROM viajes WHERE id = ?', [id_viaje], (err, result) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				resolve(result);
+			}
+		});
+	});
+}
+
+
 module.exports = {
 	getAll: getAll,
 	getById: getById,
+	getByIdResumen: getByIdResumen,
+	getByIdSimple: getByIdSimple,
 	insert: insert,
 	updateById: updateById,
 	getByIdOrganizador: getByIdOrganizador,
-	getByIdSimple: getByIdSimple,
 	getByIdUsuario: getByIdUsuario,
 	filter: filter,
 	insertDestino: insertDestino,
 	getDestinoByAll: getDestinoByAll,
 	insertViajesDestinos: insertViajesDestinos,
-	insertActividad: insertActividad
+	insertActividad: insertActividad,
+	deleteViaje: deleteViaje,
+	getDestinosByIdViaje: getDestinosByIdViaje,
+	getActividadesByIdViaje: getActividadesByIdViaje
 }

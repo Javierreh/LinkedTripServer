@@ -41,6 +41,18 @@ router.get('/:idViaje', function(req, res) {
 });
 
 
+/* Ruta para obtener un viaje (resumen) según su ID */
+router.get('/resumen/:idViaje', function(req, res) {
+	viajesModel.getByIdResumen(req.params.idViaje).then(rows => {
+		if (rows.length === 0) res.json({ mensaje: `Ningún viaje encontrado con el ID ${req.params.idViaje}` });
+		res.json(rows);
+	})
+	.catch(err => {
+		res.json({ error: err });
+	});
+});
+
+
 /* Ruta para obtener un viaje (simple) según su ID */
 router.get('/simple/:idViaje', function(req, res) {
 	viajesModel.getByIdSimple(req.params.idViaje).then(rows => {
@@ -130,9 +142,42 @@ router.get('/destino/:nombre/:latitud/:longitud', (req, res) => {
 });
 
 
+/* Ruta para encontrar destinos por id del viaje */
+router.get('/destino/viaje/:id_viaje', (req, res) => {
+	viajesModel.getDestinosByIdViaje(req.params.id_viaje).then(rows => {
+		res.json(rows);
+	})
+	.catch(err => {
+		res.json({ error: err });
+	});
+});
+
+
 /* Ruta para insertar una nueva actividad */
 router.post('/actividad/new', (req, res) => {
 	viajesModel.insertActividad(req.body).then(result => {
+		res.json(result);
+	})
+	.catch(err => {
+		res.json({ error: err });
+	});
+});
+
+
+/* Ruta obtener las actividades por id del viaje */
+router.get('/actividades/viaje/:id_viaje', (req, res) => {
+	viajesModel.getActividadesByIdViaje(req.params.id_viaje).then(rows => {
+		res.json(rows);
+	})
+	.catch(err => {
+		res.json({ error: err });
+	});
+});
+
+
+/* Ruta para eliminar un viaje */
+router.delete('/delete/:id', (req, res) => {
+	viajesModel.deleteViaje(req.params.id).then(result => {
 		res.json(result);
 	})
 	.catch(err => {

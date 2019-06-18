@@ -30,11 +30,6 @@ let checkUserMiddleware = (req, res, next) => {
 }
 
 
-
-
-
-
-
 /* Ruta para obtener TODOS los viajeros */
 router.get('/', function(req, res) {
 	viajerosModel.getAll().then(rows => {
@@ -44,6 +39,7 @@ router.get('/', function(req, res) {
 		res.json({ error: err });
 	});
 });
+
 
 router.get('/test', checkUserMiddleware, function(req, res) {
 
@@ -77,22 +73,6 @@ router.get('/:idUsuario', function(req, res) {
 		res.json({ error: err });
 	});
 });
-
-
-/* Ruta para obtener un perfil de usuario según su ID */
-// router.get('/usuario/:idUsuario', function(req, res) {
-
-// 	viajerosModel.getUserById(req.params.idUsuario).then(rows => {
-// 		if (rows.length === 0) res.json({ mensaje: `Ningún usuario encontrado con el ID ${req.params.idUsuario}` });
-// 		res.json(rows);
-// 	})
-// 	.catch(err => {
-// 		res.json({ error: err });
-// 	});
-// });
-
-
-
 
 
 /* Ruta para obtener las puntuaciones de un perfil segun su ID */
