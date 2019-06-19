@@ -94,7 +94,7 @@ let aceptarPeticion = (values) => {
 // Insertar una peticion
 let insertMiembro = (values) => {
 	return new Promise((resolve, reject) => {
-		db.get().query('INSERT INTO viajeros_viajes(viajeros.fk_viajeros, viajeros.fk_viajes) VALUES(?, ?)', [values.fk_viajeros, values.fk_viajes], (err, result) => {
+		db.get().query('INSERT INTO viajeros_viajes(viajeros_viajes.fk_viajeros, viajeros_viajes.fk_viajes) VALUES(?, ?)', [values.fk_viajeros, values.fk_viajes], (err, result) => {
 			if (err) {
 				reject(err);
 			}
