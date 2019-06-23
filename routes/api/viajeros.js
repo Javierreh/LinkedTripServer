@@ -75,6 +75,17 @@ router.get('/:idUsuario', function(req, res) {
 });
 
 
+/* Ruta para obtener un viajero según su ID */
+router.get('/username/:usuario', function(req, res) {
+	viajerosModel.getPerfilByUsuario(req.params.usuario).then(rows => {
+		res.json(rows);
+	})
+	.catch(err => {
+		res.json({ error: err });
+	});
+});
+
+
 /* Ruta para obtener las puntuaciones de un perfil segun su ID */
 router.get('/puntuaciones/:idUsuario', function(req, res) {
 	viajerosModel.getPuntuacionesById(req.params.idUsuario).then(rows => {

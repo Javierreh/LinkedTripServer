@@ -4,7 +4,7 @@ const db = require('../db');
 // Consulta para obtener TODOS los viajes
 let getAll = () => {
 	return new Promise((resolve, reject) => {
-		db.get().query('SELECT viajes.id, viajes.titulo, viajes.descripcion, viajes.foto, viajes.fecha_inicio, viajes.fecha_fin, viajes.alojamiento, viajes.viajeros_max, viajes.fecha_creacion, viajes.fk_organizador AS id_organizador, viajeros.foto_perfil, COUNT(DISTINCT viajeros_viajes.id) AS total_viajeros, COUNT(DISTINCT viajes_destinos.id) AS total_destinos, COUNT(DISTINCT actividades.id) AS total_actividades FROM viajes JOIN viajeros ON viajes.fk_organizador = viajeros.id LEFT JOIN viajeros_viajes ON viajeros_viajes.fk_viajes = viajes.id LEFT JOIN viajes_destinos ON viajes_destinos.fk_viajes = viajes.id LEFT JOIN actividades ON actividades.fk_viajes = viajes.id GROUP BY 1 ORDER BY viajes.fecha_creacion DESC', (err, rows) => {
+		db.get().query('SELECT viajes.id, viajes.titulo, viajes.descripcion, viajes.foto, viajes.fecha_inicio, viajes.fecha_fin, viajes.alojamiento, viajes.viajeros_max, viajes.fecha_creacion, viajes.fk_organizador AS id_organizador, viajeros.foto_perfil, COUNT(DISTINCT viajeros_viajes.id) AS total_viajeros, COUNT(DISTINCT viajes_destinos.id) AS total_destinos, COUNT(DISTINCT actividades.id) AS total_actividades FROM viajes JOIN viajeros ON viajes.fk_organizador = viajeros.id LEFT JOIN viajeros_viajes ON viajeros_viajes.fk_viajes = viajes.id LEFT JOIN viajes_destinos ON viajes_destinos.fk_viajes = viajes.id LEFT JOIN actividades ON actividades.fk_viajes = viajes.id WHERE viajes.realizado = 0 GROUP BY 1 ORDER BY viajes.fecha_creacion DESC', (err, rows) => {
 			if (err) {
 				reject(err);
 			}
@@ -43,7 +43,7 @@ let filter = (consulta) => {
 			query += ` AND viajes.nivel_economico = '${consulta.nivel_economico}'`;
 		}
 
-		query += " GROUP BY 1"
+		query += " AND viajes.realizado = 0 GROUP BY 1"
 
 		db.get().query(query, (err, rows) => {
 			if (err) {
